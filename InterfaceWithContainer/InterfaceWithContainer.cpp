@@ -1,6 +1,9 @@
 // InterfaceWithContainer.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 #include <iostream>
 #include <vector>
 
@@ -68,6 +71,9 @@ private:
 
 int main()
 {
+    //method to detect memory leaks. If we are not sure which is the exit
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
     std::cout << "Hello World!\n";
 
     //implement initialization list based on Lambda type
@@ -77,6 +83,10 @@ int main()
     //Create pointer here
     IAnimal *a1 = new Dog; 
     IAnimal *a2 = new Duck;
+
+    //Kludge implementation to allow for auto deallocation when this main function out of the scope    
+    //std::shared_ptr<IAnimal> smart_a1(a1);
+    //std::shared_ptr<IAnimal> smart_a2(a2);    
 
     //create initialization list, consisted of pointer above
     auto iter = { a1,a2 };
@@ -88,6 +98,9 @@ int main()
     //since pointer a1 and a2 was created here, it will need to be deleted here to, just before out of scope.
     delete a1;
     delete a2;
+
+    //method to detect memory leaks. Only if we certain only one exit
+    //_CrtDumpMemoryLeaks();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
